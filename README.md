@@ -1,69 +1,58 @@
-# React + TypeScript + Vite
+# Study Progress Log
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple, user-friendly web app to track your daily study progress and maintain a consistent learning habit. Log what you studied each day, note challenges or breakthroughs, and visualize your progress over time with insightful visualizations.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Daily Study Journal:** Write about your daily study sessions with automatic word count tracking.
+- **Calendar View:** Browse past entries and view detailed statistics to monitor your learning journey.
+- **Clean & Modern UI:** Built with React and styled with Tailwind CSS for a seamless, responsive experience.
+- **Hosted on GitHub Pages:** Easily accessible from any browser without installation.
 
-## Expanding the ESLint configuration
+## Live Demo
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Try it out at:
+[https://nekokrator.github.io/study-log/](https://nekokrator.github.io/study-log/)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## How to Use
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+1. Open the app in your browser.
+2. Write a summary of your daily study session.
+3. Save your entry to store it securely.
+4. Use the calendar view to review your study history and track progress with detailed stats.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Tech Stack
+
+- **React:** For a dynamic and interactive front-end.
+- **Vite:** For fast development and optimized builds.
+- **Tailwind CSS:** For a modern, responsive, and customizable UI.
+- **GitHub Pages:** For easy hosting and deployment.
+
+## Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/nekokrator/study-log.git
+
+# Install dependencies
+npm install
+
+# Run the app locally
+npm run dev
+
+# Build for production
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Repository
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Source code is available at:
+[https://github.com/nekokrator/study-log](https://github.com/nekokrator/study-log)
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Contributing
+
+Contributions are welcome! Feel free to submit issues or pull requests to improve the app.
+
+## License
+
+This project is licensed under the MIT License.
