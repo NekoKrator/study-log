@@ -36,7 +36,7 @@ export default function MainTabs() {
         <CalendarTab entries={entries} />
       </TabsContent>
       <TabsContent value='statistics' className='space-y-4'>
-        <StatisticsTab />
+        <StatisticsTab entries={entries} />
       </TabsContent>
       <TabsContent value='pastEntries' className='space-y-4'>
         <PastEntriesTab entries={entries} />
