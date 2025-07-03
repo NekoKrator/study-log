@@ -14,16 +14,12 @@ interface TodayTabProps {
 export default function StatisticsTab({ entries }: TodayTabProps) {
   const calculateStats = () => {
     if (entries.length === 0) {
-      return {
-        currentStreak: 0,
-        firstDay: null,
-        totalDays: 0,
-        totalWords: 0,
-      };
+      return { currentStreak: 0, firstDay: null, totalDays: 0, totalWords: 0 };
     }
 
-    const sortedDates = entries
-      .map((entry) => new Date(entry.date))
+    const uniqueDates = Array.from(new Set(entries.map((e) => e.date))); // Remove duplicates
+    const sortedDates = uniqueDates
+      .map((date) => new Date(date))
       .sort((a, b) => b.getTime() - a.getTime());
 
     let currentStreak = 0;
@@ -33,7 +29,6 @@ export default function StatisticsTab({ entries }: TodayTabProps) {
     for (let i = 0; i < sortedDates.length; i++) {
       const entryDate = new Date(sortedDates[i]);
       entryDate.setHours(0, 0, 0, 0);
-
       const expectedDate = new Date(todayDate);
       expectedDate.setDate(todayDate.getDate() - i);
 
@@ -47,7 +42,7 @@ export default function StatisticsTab({ entries }: TodayTabProps) {
     return {
       currentStreak,
       firstDay: sortedDates[sortedDates.length - 1],
-      totalDays: entries.length,
+      totalDays: uniqueDates.length,
       totalWords: entries.reduce((sum, entry) => sum + entry.wordCount, 0),
     };
   };

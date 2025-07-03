@@ -23,11 +23,26 @@ interface TodayTabProps {
   setEntries: React.Dispatch<React.SetStateAction<StudyEntry[]>>;
 }
 
-export default function TodayTab({ entries, setEntries }: TodayTabProps) {
+export default function TodayTab({ setEntries }: TodayTabProps) {
   const [todayEntry, setTodayEntry] = useState('');
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('entries');
+      if (saved) {
+        setEntries(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.error('Failed to parse entries from localStorage:', error);
+      setEntries([]);
+    }
+  }, []);
+
   const wordCount = todayEntry.trim()
-    ? todayEntry.trim().split(/\s+/).length
+    ? todayEntry
+        .trim()
+        .split(/\s+/)
+        .filter((word) => word.length > 0).length
     : 0;
 
   const today = formatDateKey(new Date());
@@ -37,28 +52,21 @@ export default function TodayTab({ entries, setEntries }: TodayTabProps) {
     if (!trimmed) return;
 
     const newEntry = { date: today, content: trimmed, wordCount };
-    const saved: StudyEntry[] = JSON.parse(
-      localStorage.getItem('entries') || '[]'
-    );
-    const filtered = saved.filter((e) => e.date !== today);
-    const updated = [...filtered, newEntry].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
-    localStorage.setItem('entries', JSON.stringify(updated));
-    setEntries(updated);
-
-    setTodayEntry('');
-  };
-
-  useEffect(() => {
-    const todayEntryObj = entries.find((e) => e.date === today);
-    if (todayEntryObj) {
-      setTodayEntry(todayEntryObj.content);
-    } else {
+    try {
+      const saved: StudyEntry[] = JSON.parse(
+        localStorage.getItem('entries') || '[]'
+      );
+      const filtered = saved.filter((e) => e.date !== today);
+      const updated = [...filtered, newEntry].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+      localStorage.setItem('entries', JSON.stringify(updated));
+      setEntries(updated);
       setTodayEntry('');
+    } catch (error) {
+      console.error('Failed to save entry to localStorage:', error);
     }
-  }, [entries, today]);
+  };
 
   return (
     <Card>
@@ -76,6 +84,7 @@ export default function TodayTab({ entries, setEntries }: TodayTabProps) {
           value={todayEntry}
           onChange={(e) => setTodayEntry(e.target.value)}
           className='min-h-[200px]'
+          aria-label='Daily study entry'
         />
       </CardContent>
 
@@ -83,8 +92,12 @@ export default function TodayTab({ entries, setEntries }: TodayTabProps) {
         <span className='text-sm text-muted-foreground'>
           {todayEntry.trim() ? `${wordCount} words` : '0 words'}
         </span>
-        <Button onClick={saveEntry} disabled={!todayEntry.trim()}>
-          Save
+        <Button
+          onClick={saveEntry}
+          disabled={!todayEntry.trim()}
+          aria-label='Save study entry'
+        >
+          Save entry
         </Button>
       </CardFooter>
     </Card>

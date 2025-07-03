@@ -27,12 +27,6 @@ export default function CalendarTab({ entries }: TodayTabProps) {
 
   const hasEntry = (date: Date) => {
     const dateKey = formatDateKey(date);
-    console.log(
-      'Checking date:',
-      dateKey,
-      'Available entries:',
-      entries.map((e) => e.date)
-    );
     return entries.some((entry) => entry.date === dateKey);
   };
 
@@ -46,8 +40,8 @@ export default function CalendarTab({ entries }: TodayTabProps) {
   console.log('All entry dates:', Array.from(entryDates));
 
   return (
-    <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-      <Card>
+    <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
+      <Card className='lg:col-span-1'>
         <CardHeader>
           <CardTitle className='flex items-center gap-2'>
             <CalendarDays className='w-5 h-5' />
@@ -60,18 +54,11 @@ export default function CalendarTab({ entries }: TodayTabProps) {
             mode='single'
             selected={selectedDay}
             onSelect={setSelectedDay}
-            className='rounded-md border'
+            className='rounded-md border w-full'
             modifiers={{
               hasEntry: (date: Date) => {
                 const dateKey = formatDateKey(date);
-                const hasEntryResult = entryDates.has(dateKey);
-                console.log(
-                  'Calendar checking:',
-                  dateKey,
-                  'has entry:',
-                  hasEntryResult
-                );
-                return hasEntryResult;
+                return entryDates.has(dateKey);
               },
             }}
             modifiersClassNames={{
@@ -82,7 +69,7 @@ export default function CalendarTab({ entries }: TodayTabProps) {
         </CardContent>
       </Card>
       {selectedDay && (
-        <Card>
+        <Card className='lg:col-span-2'>
           <CardHeader>
             <CardTitle>{formatDate(selectedDay)}</CardTitle>
           </CardHeader>
