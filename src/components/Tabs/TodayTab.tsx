@@ -8,9 +8,9 @@ import {
 } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { formatDate } from '@/lib/formatDate';
 import { BookOpen } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { formatDate, formatDateKey } from '@/lib/formatDate';
 
 interface StudyEntry {
   date: string;
@@ -18,41 +18,47 @@ interface StudyEntry {
   wordCount: number;
 }
 
-export default function TodayTab() {
+interface TodayTabProps {
+  entries: StudyEntry[];
+  setEntries: React.Dispatch<React.SetStateAction<StudyEntry[]>>;
+}
+
+export default function TodayTab({ entries, setEntries }: TodayTabProps) {
   const [todayEntry, setTodayEntry] = useState('');
-  const [entries, setEntries] = useState<StudyEntry[]>([]);
 
   const wordCount = todayEntry.trim()
     ? todayEntry.trim().split(/\s+/).length
     : 0;
-  const today = new Date().toLocaleDateString();
+
+  const today = formatDateKey(new Date());
 
   const saveEntry = () => {
     const trimmed = todayEntry.trim();
     if (!trimmed) return;
 
     const newEntry = { date: today, content: trimmed, wordCount };
-    const saved = JSON.parse(localStorage.getItem('entries') || '[]');
-    const filtered = saved.filter((e: any) => e.date !== today);
+    const saved: StudyEntry[] = JSON.parse(
+      localStorage.getItem('entries') || '[]'
+    );
+    const filtered = saved.filter((e) => e.date !== today);
     const updated = [...filtered, newEntry].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
     localStorage.setItem('entries', JSON.stringify(updated));
     setEntries(updated);
+
+    setTodayEntry('');
   };
 
   useEffect(() => {
-    const savedEntries = localStorage.getItem('entries');
-    if (savedEntries) {
-      const entries: StudyEntry[] = JSON.parse(savedEntries);
-      const todayEntryObj = entries.find((entry) => entry.date === today);
-      if (todayEntryObj) {
-        setTodayEntry(todayEntryObj.content);
-      }
-      setEntries(entries);
+    const todayEntryObj = entries.find((e) => e.date === today);
+    if (todayEntryObj) {
+      setTodayEntry(todayEntryObj.content);
+    } else {
+      setTodayEntry('');
     }
-  }, []);
+  }, [entries, today]);
 
   return (
     <Card>

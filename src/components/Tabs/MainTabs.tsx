@@ -3,8 +3,24 @@ import TodayTab from './TodayTab';
 import CalendarTab from './CalendarTab';
 import StatisticsTab from './StatisticsTab';
 import PastEntriesTab from './PastEntriesTab';
+import { useState, useEffect } from 'react';
+
+interface StudyEntry {
+  date: string;
+  content: string;
+  wordCount: number;
+}
 
 export default function MainTabs() {
+  const [entries, setEntries] = useState<StudyEntry[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('entries');
+    if (saved) {
+      setEntries(JSON.parse(saved));
+    }
+  }, []);
+
   return (
     <Tabs defaultValue='today' className='space-y-4'>
       <TabsList className='grid w-full grid-cols-4'>
@@ -14,10 +30,10 @@ export default function MainTabs() {
         <TabsTrigger value='pastEntries'>Past Entries</TabsTrigger>
       </TabsList>
       <TabsContent value='today' className='space-y-4'>
-        <TodayTab />
+        <TodayTab entries={entries} setEntries={setEntries} />
       </TabsContent>
       <TabsContent value='calendar' className='space-y-4'>
-        <CalendarTab />
+        <CalendarTab entries={entries} />
       </TabsContent>
       <TabsContent value='statistics' className='space-y-4'>
         <StatisticsTab />
