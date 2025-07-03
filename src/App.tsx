@@ -1,4 +1,4 @@
-import MainTabs from './components/MainTabs';
+import MainTabs from './components/Tabs/MainTabs';
 
 export default function App() {
   return (
