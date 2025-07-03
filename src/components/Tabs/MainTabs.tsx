@@ -39,7 +39,7 @@ export default function MainTabs() {
         <StatisticsTab />
       </TabsContent>
       <TabsContent value='pastEntries' className='space-y-4'>
-        <PastEntriesTab />
+        <PastEntriesTab entries={entries} />
       </TabsContent>
     </Tabs>
   );
