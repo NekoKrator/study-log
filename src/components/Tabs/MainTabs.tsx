@@ -14,12 +14,21 @@ interface StudyEntry {
 export default function MainTabs() {
   const [entries, setEntries] = useState<StudyEntry[]>([]);
 
+  const tabs = {[
+    {value: 'today', label: 'Today', content: <TodayTab /> },
+    {value: 'calendar', label: 'Calendar', content: <CalendarTab /> },
+    {value: 'statistics', label: 'Statistics', content: <StatisticsTab /> },
+    {value: 'pastEntries', label: 'Past Entries', content: <PastEntriesTab /> },
+  ]}
+
   useEffect(() => {
     const saved = localStorage.getItem('entries');
     if (saved) {
       setEntries(JSON.parse(saved));
     }
   }, []);
+
+
 
   return (
     <Tabs defaultValue='today' className='space-y-4'>
