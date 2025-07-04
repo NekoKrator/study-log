@@ -1,4 +1,4 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import AutoTabs from './AutoTabs';
 import TodayTab from './TodayTab';
 import CalendarTab from './CalendarTab';
 import StatisticsTab from './StatisticsTab';
@@ -14,12 +14,28 @@ interface StudyEntry {
 export default function MainTabs() {
   const [entries, setEntries] = useState<StudyEntry[]>([]);
 
-  const tabs = {[
-    {value: 'today', label: 'Today', content: <TodayTab /> },
-    {value: 'calendar', label: 'Calendar', content: <CalendarTab /> },
-    {value: 'statistics', label: 'Statistics', content: <StatisticsTab /> },
-    {value: 'pastEntries', label: 'Past Entries', content: <PastEntriesTab /> },
-  ]}
+  const tabs = [
+    {
+      value: 'today',
+      label: 'Today',
+      content: <TodayTab entries={entries} setEntries={setEntries} />,
+    },
+    {
+      value: 'calendar',
+      label: 'Calendar',
+      content: <CalendarTab entries={entries} />,
+    },
+    {
+      value: 'statistics',
+      label: 'Statistics',
+      content: <StatisticsTab entries={entries} />,
+    },
+    {
+      value: 'pastEntries',
+      label: 'Past Entries',
+      content: <PastEntriesTab entries={entries} />,
+    },
+  ];
 
   useEffect(() => {
     const saved = localStorage.getItem('entries');
@@ -28,28 +44,5 @@ export default function MainTabs() {
     }
   }, []);
 
-
-
-  return (
-    <Tabs defaultValue='today' className='space-y-4'>
-      <TabsList className='grid w-full grid-cols-4'>
-        <TabsTrigger value='today'>Today</TabsTrigger>
-        <TabsTrigger value='calendar'>Calendar</TabsTrigger>
-        <TabsTrigger value='statistics'>Statistics</TabsTrigger>
-        <TabsTrigger value='pastEntries'>Past Entries</TabsTrigger>
-      </TabsList>
-      <TabsContent value='today' className='space-y-4'>
-        <TodayTab entries={entries} setEntries={setEntries} />
-      </TabsContent>
-      <TabsContent value='calendar' className='space-y-4'>
-        <CalendarTab entries={entries} />
-      </TabsContent>
-      <TabsContent value='statistics' className='space-y-4'>
-        <StatisticsTab entries={entries} />
-      </TabsContent>
-      <TabsContent value='pastEntries' className='space-y-4'>
-        <PastEntriesTab entries={entries} />
-      </TabsContent>
-    </Tabs>
-  );
+  return <AutoTabs defaultValue='today' tabs={tabs} />;
 }
