@@ -26,7 +26,7 @@ export default function TodayTab({ setEntries }: TodayTabProps) {
       console.error('Failed to parse entries from localStorage:', error);
       setEntries([]);
     }
-  }, []);
+  }, [setEntries]);
 
   const wordCount = todayEntry.trim()
     ? todayEntry
