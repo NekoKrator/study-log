@@ -11,17 +11,7 @@ import { Button } from '@/components/ui/button';
 import { BookOpen } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { formatDate, formatDateKey } from '@/lib/formatDate';
-
-interface StudyEntry {
-  date: string;
-  content: string;
-  wordCount: number;
-}
-
-interface TodayTabProps {
-  entries: StudyEntry[];
-  setEntries: React.Dispatch<React.SetStateAction<StudyEntry[]>>;
-}
+import type { StudyEntry, TodayTabProps } from '@/types/tabs';
 
 export default function TodayTab({ setEntries }: TodayTabProps) {
   const [todayEntry, setTodayEntry] = useState('');

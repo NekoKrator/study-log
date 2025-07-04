@@ -1,15 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Target, CalendarDays, BookOpen, TrendingUp } from 'lucide-react';
-
-interface StudyEntry {
-  date: string;
-  content: string;
-  wordCount: number;
-}
-
-interface TodayTabProps {
-  entries: StudyEntry[];
-}
+import type { TodayTabProps } from '@/types/tabs';
 
 export default function StatisticsTab({ entries }: TodayTabProps) {
   const calculateStats = () => {

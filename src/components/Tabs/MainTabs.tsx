@@ -4,12 +4,7 @@ import CalendarTab from './CalendarTab';
 import StatisticsTab from './StatisticsTab';
 import PastEntriesTab from './PastEntriesTab';
 import { useState, useEffect } from 'react';
-
-interface StudyEntry {
-  date: string;
-  content: string;
-  wordCount: number;
-}
+import type { StudyEntry } from '@/types/tabs';
 
 export default function MainTabs() {
   const [entries, setEntries] = useState<StudyEntry[]>([]);

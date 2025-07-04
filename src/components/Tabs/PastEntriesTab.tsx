@@ -8,16 +8,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/lib/formatDate';
-
-interface StudyEntry {
-  date: string;
-  content: string;
-  wordCount: number;
-}
-
-interface TodayTabProps {
-  entries: StudyEntry[];
-}
+import type { TodayTabProps } from '@/types/tabs';
 
 export default function PastEntriesTab({ entries }: TodayTabProps) {
   return (

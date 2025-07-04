@@ -1,17 +1,7 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import type { AutoTabProps } from '@/types/tabs';
 
-interface TabConfig {
-  value: string;
-  label: string;
-  content: React.ReactNode;
-}
-
-interface AutoTabProps {
-  defaultValue: string;
-  tabs: TabConfig[];
-}
-
-export default function AutoTab({ defaultValue, tabs }: AutoTabProps) {
+export default function AutoTabs({ defaultValue, tabs }: AutoTabProps) {
   return (
     <Tabs defaultValue={defaultValue} className='space-y-4'>
       <TabsList className='grid w-full grid-cols-4'>

@@ -11,16 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { CalendarDays } from 'lucide-react';
 import { formatDate, formatDateKey } from '@/lib/formatDate';
 import { useState } from 'react';
-
-interface StudyEntry {
-  date: string;
-  content: string;
-  wordCount: number;
-}
-
-interface TodayTabProps {
-  entries: StudyEntry[];
-}
+import type { TodayTabProps } from '@/types/tabs';
 
 export default function CalendarTab({ entries }: TodayTabProps) {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
