@@ -1,8 +1,8 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Target, CalendarDays, BookOpen, TrendingUp } from 'lucide-react';
-import type { TodayTabProps } from '@/types/tabs';
+import type { BaseTabProps } from '@/types/tabs';
 
-export default function StatisticsTab({ entries }: TodayTabProps) {
+export default function StatisticsTab({ entries }: BaseTabProps) {
   const calculateStats = () => {
     if (entries.length === 0) {
       return { currentStreak: 0, firstDay: null, totalDays: 0, totalWords: 0 };

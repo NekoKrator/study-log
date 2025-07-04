@@ -4,31 +4,31 @@ import CalendarTab from './CalendarTab';
 import StatisticsTab from './StatisticsTab';
 import PastEntriesTab from './PastEntriesTab';
 import { useState, useEffect } from 'react';
-import type { StudyEntry } from '@/types/tabs';
+import type { TabConfig, StudyEntry } from '@/types/tabs';
 
 export default function MainTabs() {
   const [entries, setEntries] = useState<StudyEntry[]>([]);
 
-  const tabs = [
+  const tabs: TabConfig[] = [
     {
       value: 'today',
       label: 'Today',
-      content: <TodayTab entries={entries} setEntries={setEntries} />,
+      content: () => <TodayTab entries={entries} setEntries={setEntries} />,
     },
     {
       value: 'calendar',
       label: 'Calendar',
-      content: <CalendarTab entries={entries} />,
+      content: () => <CalendarTab entries={entries} />,
     },
     {
       value: 'statistics',
       label: 'Statistics',
-      content: <StatisticsTab entries={entries} />,
+      content: () => <StatisticsTab entries={entries} />,
     },
     {
       value: 'pastEntries',
       label: 'Past Entries',
-      content: <PastEntriesTab entries={entries} />,
+      content: () => <PastEntriesTab entries={entries} />,
     },
   ];
 

@@ -11,9 +11,9 @@ import { Badge } from '@/components/ui/badge';
 import { CalendarDays } from 'lucide-react';
 import { formatDate, formatDateKey } from '@/lib/formatDate';
 import { useState } from 'react';
-import type { TodayTabProps } from '@/types/tabs';
+import type { BaseTabProps } from '@/types/tabs';
 
-export default function CalendarTab({ entries }: TodayTabProps) {
+export default function CalendarTab({ entries }: BaseTabProps) {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
 
   const hasEntry = (date: Date) => {

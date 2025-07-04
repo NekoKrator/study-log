@@ -11,9 +11,9 @@ import { Button } from '@/components/ui/button';
 import { BookOpen } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { formatDate, formatDateKey } from '@/lib/formatDate';
-import type { StudyEntry, TodayTabProps } from '@/types/tabs';
+import type { StudyEntry, TabWithSetterProps } from '@/types/tabs';
 
-export default function TodayTab({ setEntries }: TodayTabProps) {
+export default function TodayTab({ setEntries }: TabWithSetterProps) {
   const [todayEntry, setTodayEntry] = useState('');
 
   useEffect(() => {

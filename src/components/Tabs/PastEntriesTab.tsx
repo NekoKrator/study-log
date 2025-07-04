@@ -8,9 +8,9 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/lib/formatDate';
-import type { TodayTabProps } from '@/types/tabs';
+import type { BaseTabProps } from '@/types/tabs';
 
-export default function PastEntriesTab({ entries }: TodayTabProps) {
+export default function PastEntriesTab({ entries }: BaseTabProps) {
   return (
     <Card>
       <CardHeader>

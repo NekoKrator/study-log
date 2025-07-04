@@ -1,7 +1,7 @@
 export interface TabConfig {
   value: string;
   label: string;
-  content: React.ReactNode;
+  content: () => React.ReactNode;
 }
 
 export interface AutoTabProps {
@@ -15,7 +15,10 @@ export interface StudyEntry {
   wordCount: number;
 }
 
-export interface TodayTabProps {
+export interface BaseTabProps {
   entries: StudyEntry[];
+}
+
+export interface TabWithSetterProps extends BaseTabProps {
   setEntries: React.Dispatch<React.SetStateAction<StudyEntry[]>>;
 }
