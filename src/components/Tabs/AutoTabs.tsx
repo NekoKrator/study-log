@@ -14,7 +14,7 @@ export default function AutoTabs({ defaultValue, tabs }: AutoTabProps) {
 
       {tabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value} className='space-y-4'>
-          {tab.content}
+          {tab.content()}
         </TabsContent>
       ))}
     </Tabs>
