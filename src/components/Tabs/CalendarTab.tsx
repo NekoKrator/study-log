@@ -16,19 +16,11 @@ import type { BaseTabProps } from '@/types/tabs';
 export default function CalendarTab({ entries }: BaseTabProps) {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
 
-  const hasEntry = (date: Date) => {
-    const dateKey = formatDateKey(date);
-    return entries.some((entry) => entry.date === dateKey);
-  };
-
-  const getEntryForDate = (date: Date) => {
-    const dateKey = formatDateKey(date);
-    return entries.find((entry) => entry.date === dateKey);
-  };
+  const entryMap = new Map(entries.map((entry) => [entry.date, entry]));
+  const hasEntry = (date: Date) => entryMap.has(formatDateKey(date));
+  const getEntryForDate = (date: Date) => entryMap.get(formatDateKey(date));
 
   const entryDates = new Set(entries.map((entry) => entry.date));
-
-  console.log('All entry dates:', Array.from(entryDates));
 
   return (
     <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
