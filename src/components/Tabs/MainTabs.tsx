@@ -5,6 +5,7 @@ import StatisticsTab from './StatisticsTab';
 import PastEntriesTab from './PastEntriesTab';
 import { useState, useEffect } from 'react';
 import type { TabConfig, StudyEntry } from '@/types/tabs';
+import { db } from '@/lib/db';
 
 export default function MainTabs() {
   const [entries, setEntries] = useState<StudyEntry[]>([]);
@@ -33,10 +34,19 @@ export default function MainTabs() {
   ];
 
   useEffect(() => {
-    const saved = localStorage.getItem('entries');
-    if (saved) {
-      setEntries(JSON.parse(saved));
-    }
+    const loadEntries = async () => {
+      try {
+        const savedEntries = await db.entries
+          .orderBy('date')
+          .reverse()
+          .toArray();
+        setEntries(savedEntries);
+      } catch (error) {
+        console.log('Failed to load entries: ', error);
+      }
+    };
+
+    loadEntries();
   }, []);
 
   return <AutoTabs defaultValue='today' tabs={tabs} />;
