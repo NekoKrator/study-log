@@ -13,6 +13,8 @@ import { useEffect, useState } from 'react';
 import { formatDate, formatDateKey } from '@/lib/formatDate';
 import type { StudyEntry, TabWithSetterProps } from '@/types/tabs';
 
+import { toast } from 'sonner';
+
 export default function TodayTab({ setEntries }: TabWithSetterProps) {
   const [todayEntry, setTodayEntry] = useState('');
 
@@ -52,6 +54,9 @@ export default function TodayTab({ setEntries }: TabWithSetterProps) {
       );
       localStorage.setItem('entries', JSON.stringify(updated));
       setEntries(updated);
+      toast('New entry added', {
+        description: 'Your study log for today has been saved.',
+      });
       setTodayEntry('');
     } catch (error) {
       console.error('Failed to save entry to localStorage:', error);
