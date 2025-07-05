@@ -13,25 +13,8 @@ import { useEffect, useState } from 'react';
 import { formatDate, formatDateKey } from '@/lib/formatDate';
 import type { StudyEntry, TabWithSetterProps } from '@/types/tabs';
 import notifyCustom from '@/lib/notifications';
-
-function loadEntries(): StudyEntry[] {
-  try {
-    const saved = localStorage.getItem('entries');
-    if (!saved) return [];
-    return JSON.parse(saved);
-  } catch {
-    console.error('Failed to parse entries from localStorage');
-    return [];
-  }
-}
-
-function saveEntries(entries: StudyEntry[]) {
-  try {
-    localStorage.setItem('entries', JSON.stringify(entries));
-  } catch {
-    console.error('Failed to save entries to localStorage');
-  }
-}
+import { db } from '@/lib/db';
+import { v4 as uuidv4 } from 'uuid';
 
 function countWords(text: string) {
   return text.trim() ? text.trim().split(/\s+/).filter(Boolean).length : 0;
@@ -44,34 +27,22 @@ export default function TodayTab({ setEntries }: TabWithSetterProps) {
   const trimmed = todayEntry.trim();
 
   useEffect(() => {
-    const entries = loadEntries();
-    setEntries(entries);
+    db.entries.toArray().then(setEntries);
   }, [setEntries]);
 
-  const wordCount = todayEntry.trim()
-    ? todayEntry
-        .trim()
-        .split(/\s+/)
-        .filter((word) => word.length > 0).length
-    : 0;
-
-  const handleSaveEntry = () => {
+  const handleSaveEntry = async () => {
     if (!trimmed) return;
 
     const newEntry: StudyEntry = {
+      id: uuidv4(),
       date: today,
       content: trimmed,
       wordCount: countWords(todayEntry),
     };
 
-    const entries = loadEntries();
-    const filtered = entries.filter((e) => e.date !== today);
-    const updated = [...filtered, newEntry].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
-    saveEntries(updated);
-    setEntries(updated);
+    await db.entries.put(newEntry);
+    const all = await db.entries.toArray();
+    setEntries(all);
     notifyCustom(
       'New entry added!',
       'Your study log for today has been saved.'
@@ -101,7 +72,7 @@ export default function TodayTab({ setEntries }: TabWithSetterProps) {
 
       <CardFooter className='flex justify-between items-center'>
         <span className='text-sm text-muted-foreground'>
-          {todayEntry.trim() ? `${wordCount} words` : '0 words'}
+          {countWords(todayEntry)} words
         </span>
         <Button
           onClick={handleSaveEntry}

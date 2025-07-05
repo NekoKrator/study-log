@@ -10,17 +10,22 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays } from 'lucide-react';
 import { formatDate, formatDateKey } from '@/lib/formatDate';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { BaseTabProps } from '@/types/tabs';
 
 export default function CalendarTab({ entries }: BaseTabProps) {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
 
-  const entryMap = new Map(entries.map((entry) => [entry.date, entry]));
-  const hasEntry = (date: Date) => entryMap.has(formatDateKey(date));
+  const entryMap = useMemo(
+    () => new Map(entries.map((entry) => [entry.date, entry])),
+    [entries]
+  );
+  const entryDates = useMemo(
+    () => new Set(entries.map((entry) => entry.date)),
+    [entries]
+  );
   const getEntryForDate = (date: Date) => entryMap.get(formatDateKey(date));
-
-  const entryDates = new Set(entries.map((entry) => entry.date));
+  const entry = selectedDay ? getEntryForDate(selectedDay) : undefined;
 
   return (
     <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
@@ -39,10 +44,7 @@ export default function CalendarTab({ entries }: BaseTabProps) {
             onSelect={setSelectedDay}
             className='rounded-md border w-full'
             modifiers={{
-              hasEntry: (date: Date) => {
-                const dateKey = formatDateKey(date);
-                return entryDates.has(dateKey);
-              },
+              hasEntry: (date: Date) => entryDates.has(formatDateKey(date)),
             }}
             modifiersClassNames={{
               hasEntry:
@@ -57,15 +59,11 @@ export default function CalendarTab({ entries }: BaseTabProps) {
             <CardTitle>{formatDate(selectedDay)}</CardTitle>
           </CardHeader>
           <CardContent>
-            {hasEntry(selectedDay) ? (
+            {entry ? (
               <div className='space-y-2'>
-                <Badge variant='secondary'>
-                  {getEntryForDate(selectedDay)?.wordCount} words
-                </Badge>
+                <Badge variant='secondary'>{entry.wordCount} words</Badge>
                 <ScrollArea className='h-[200px] w-full rounded border p-3'>
-                  <p className='text-sm whitespace-pre-wrap'>
-                    {getEntryForDate(selectedDay)?.content}
-                  </p>
+                  <p className='text-sm whitespace-pre-wrap'>{entry.content}</p>
                 </ScrollArea>
               </div>
             ) : (

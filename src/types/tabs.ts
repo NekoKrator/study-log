@@ -10,6 +10,7 @@ export interface AutoTabProps {
 }
 
 export interface StudyEntry {
+  id: string,
   date: string;
   content: string;
   wordCount: number;
