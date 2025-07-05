@@ -14,19 +14,38 @@ import { formatDate, formatDateKey } from '@/lib/formatDate';
 import type { StudyEntry, TabWithSetterProps } from '@/types/tabs';
 import notifyCustom from '@/lib/notifications';
 
+function loadEntries(): StudyEntry[] {
+  try {
+    const saved = localStorage.getItem('entries');
+    if (!saved) return [];
+    return JSON.parse(saved);
+  } catch {
+    console.error('Failed to parse entries from localStorage');
+    return [];
+  }
+}
+
+function saveEntries(entries: StudyEntry[]) {
+  try {
+    localStorage.setItem('entries', JSON.stringify(entries));
+  } catch {
+    console.error('Failed to save entries to localStorage');
+  }
+}
+
+function countWords(text: string) {
+  return text.trim() ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+}
+
 export default function TodayTab({ setEntries }: TabWithSetterProps) {
   const [todayEntry, setTodayEntry] = useState('');
 
+  const today = formatDateKey(new Date());
+  const trimmed = todayEntry.trim();
+
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('entries');
-      if (saved) {
-        setEntries(JSON.parse(saved));
-      }
-    } catch (error) {
-      console.error('Failed to parse entries from localStorage:', error);
-      setEntries([]);
-    }
+    const entries = loadEntries();
+    setEntries(entries);
   }, [setEntries]);
 
   const wordCount = todayEntry.trim()
@@ -36,31 +55,28 @@ export default function TodayTab({ setEntries }: TabWithSetterProps) {
         .filter((word) => word.length > 0).length
     : 0;
 
-  const today = formatDateKey(new Date());
-
-  const saveEntry = () => {
-    const trimmed = todayEntry.trim();
+  const handleSaveEntry = () => {
     if (!trimmed) return;
 
-    const newEntry = { date: today, content: trimmed, wordCount };
-    try {
-      const saved: StudyEntry[] = JSON.parse(
-        localStorage.getItem('entries') || '[]'
-      );
-      const filtered = saved.filter((e) => e.date !== today);
-      const updated = [...filtered, newEntry].sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-      localStorage.setItem('entries', JSON.stringify(updated));
-      setEntries(updated);
-      notifyCustom(
-        'New entry added!',
-        'Your study log for today has been saved.'
-      );
-      setTodayEntry('');
-    } catch (error) {
-      console.error('Failed to save entry to localStorage:', error);
-    }
+    const newEntry: StudyEntry = {
+      date: today,
+      content: trimmed,
+      wordCount: countWords(todayEntry),
+    };
+
+    const entries = loadEntries();
+    const filtered = entries.filter((e) => e.date !== today);
+    const updated = [...filtered, newEntry].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
+    saveEntries(updated);
+    setEntries(updated);
+    notifyCustom(
+      'New entry added!',
+      'Your study log for today has been saved.'
+    );
+    setTodayEntry('');
   };
 
   return (
@@ -88,7 +104,7 @@ export default function TodayTab({ setEntries }: TabWithSetterProps) {
           {todayEntry.trim() ? `${wordCount} words` : '0 words'}
         </span>
         <Button
-          onClick={saveEntry}
+          onClick={handleSaveEntry}
           disabled={!todayEntry.trim()}
           aria-label='Save study entry'
         >
